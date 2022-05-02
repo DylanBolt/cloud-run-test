@@ -1,4 +1,7 @@
 # ~~~ make-request.py ~~~
+from flask import Flask, jsonify, request
+import requests
+
 
 urls = [ # all stolen from https://phishingquiz.withgoogle.com/ on 2022-04-27
   'https://drive--google.com/luke.johnson',
@@ -11,15 +14,19 @@ urls = [ # all stolen from https://phishingquiz.withgoogle.com/ on 2022-04-27
   'www.tripit.com/uhp/userAgreement'
 ]
 
-def do_request(urls):
+def do_request():
   #    1. Make the request
+  r = requests.post('http://localhost:5555/predict', json = 'drive--google.com/luke.johnson')
   #    1. Check the request for errors; handle (print) errors if so
+  r.status_code
   #    1. Assuming no errors, print the predicted response
-  pass
+  data = r.json()
+  return data
+
 
 # 1. First, `post` all the urls at the same time
-do_request(urls)
+do_request()
 
 # 2. Then, loop over the urls and post one at a time.
-for url in urls:
-  do_request([url])
+#for url in urls:
+  #do_request([url])

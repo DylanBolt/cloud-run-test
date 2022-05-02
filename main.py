@@ -5,6 +5,8 @@ import json
 import requests
 import cloudpickle
 import pickle
+import re
+
 
 #Intialize the flask app
 app = Flask(__name__)
@@ -26,12 +28,13 @@ def handle_exception(e):
     response.content_type = "application/json"
     return response
 
-model = cloudpickle.dumps('phish-model-1649995335.cloudpickle')
-
-
 
 @app.route('/predict', methods = ['POST'])
 def predict():
-    """This route returns a predictions in JSON."""
-    predictions = model.predict()
-    return jsonify('pong!')
+    """This route returns predictions in JSON."""
+    model = cloudpickle.load('phish-model-1649995335.cloudpickle')
+    #urls = request.get_json()
+    urls = request.get_json()
+    urls_df = pd.dataframe(urls, columns = ['domain'])
+    predictions = model.predict(urls_df['domain'])
+    return jsonify(predictions)
