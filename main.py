@@ -3,6 +3,8 @@ from werkzeug.exceptions import HTTPException
 import logging
 import json
 import requests
+import cloudpickle
+import pickle
 
 #Intialize the flask app
 app = Flask(__name__)
@@ -24,7 +26,12 @@ def handle_exception(e):
     response.content_type = "application/json"
     return response
 
-@app.route('/predict', methods = ['GET'])
+model = cloudpickle.dumps('phish-model-1649995335.cloudpickle')
+
+
+
+@app.route('/predict', methods = ['POST'])
 def predict():
     """This route returns a predictions in JSON."""
+    predictions = model.predict()
     return jsonify('pong!')
